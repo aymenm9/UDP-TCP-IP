@@ -1,15 +1,22 @@
 import java.net.*;
 
 public class p2 {
-    public static void main(String[] args) throws Exception {
-        DatagramSocket ds = new DatagramSocket(1025);
+    public static void main(String[] args) {
+    try{   
+        DatagramSocket ds = new DatagramSocket(1027);
         byte[] data_from_p1 = new byte[1024];
-        // byte[] data = "I'm process2".getBytes();
+        String str = "I'm process2";
+        byte[] data = str.getBytes();
         DatagramPacket dp = new DatagramPacket(data_from_p1, data_from_p1.length);
-        System.out.println("Waiting for packet from process1");
         ds.receive(dp);
+        String str_ = new String(dp.getData(),0,dp.getLength());
+        System.out.printf("Received packet from process1: %s\n",str_);
+        DatagramPacket dp1 = new DatagramPacket(data, data.length, InetAddress.getByName("127.0.0.1"), 1025);
+        ds.send(dp1);
         ds.close();
-        String str = new String(dp.getData(),0,dp.getLength());
-        System.out.printf("Received packet from process1: %s\n",str);
+    }catch(Exception e){
+        System.out.println(e);
+    }
+
     }
 }
